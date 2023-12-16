@@ -1,10 +1,11 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 
 public class Tile {
     private final int x;
     private final int y;
-    private final int value;
+    private int value;
     private boolean revealed;
     private boolean flagged;
     private boolean bomb;
@@ -46,6 +47,10 @@ public class Tile {
         this.flagged = false;
     }
 
+    public void incrementValue() {
+        value++;
+    }
+
     /**
      * Returns the value of held by this tile.
      *
@@ -79,8 +84,24 @@ public class Tile {
      * @param gc graphics context.
      */
     public void render(GraphicsContext gc) {
-        gc.fillRect(getX(), getY(), 50,50);
-        gc.fillText(String.valueOf(getValue()), getX(),getY());
+        gc.setFill(Color.LIGHTGRAY);
+        gc.fillRect(getX() * 50, getY() * 50,  50,50);
+        gc.setFill(Color.BLACK);
+        gc.strokeRect(getX() * 50, getY() * 50,  50,50);
+        if (revealed) {
+            renderText(gc);
+        }
+
+    }
+
+    private void renderText(GraphicsContext gc) {
+        int x = getX() * 50 + 25;
+        int y = getY() * 50 + 25;
+        if (this.isBomb()) {
+            gc.fillText("!", x, y);
+        } else {
+            gc.fillText(String.valueOf(getValue()), x, y);
+        }
     }
 
     /**
@@ -97,5 +118,14 @@ public class Tile {
      */
     public boolean isBomb() {
         return bomb;
+    }
+
+    @Override
+    public String toString() {
+        if (isBomb()) {
+            return "{!}";
+        } else {
+            return "{" + value + "}";
+        }
     }
 }
