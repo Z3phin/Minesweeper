@@ -29,6 +29,15 @@ public class Board {
         }
     }
 
+    public void click(int x, int y) {
+        Tile tile = getTile(x,y);
+        tile.click();
+    }
+
+    public void rightClick(int x, int y) {
+        Tile tile = getTile(x,y);
+        tile.rightClick();
+    }
     private void populate() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -75,6 +84,29 @@ public class Board {
                 && x >= 0
                 && y < height
                 && y >= 0;
+    }
+
+    public void revealNeighbours(int x, int y) {
+        int[] adjustments = {-1,0,1};
+        for (int yAdjustment: adjustments) {
+            for (int xAdjustment: adjustments) {
+                int yOfNeighbour = y + yAdjustment;
+                int xOfNeighbour = x + xAdjustment;
+
+                if (withinBounds(xOfNeighbour, yOfNeighbour)) {
+                    click(xOfNeighbour, yOfNeighbour);
+                }
+            }
+        }
+    }
+
+    public void reveal() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                tiles[y][x].removeFlag();
+                tiles[y][x].reveal();
+            }
+        }
     }
 
     @Override
