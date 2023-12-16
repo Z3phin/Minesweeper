@@ -9,6 +9,13 @@ public class Board {
     private final int bombs;
     private int revealed;
 
+    /**
+     * Creates an instance
+     *
+     * @param height
+     * @param width
+     * @param bombs
+     */
     public Board(int height, int width, int bombs) {
          this.tiles = new Tile[height][width];
          this.height = height;

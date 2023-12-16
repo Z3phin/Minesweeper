@@ -6,6 +6,11 @@ import javafx.scene.text.Font;
 
 import java.util.Objects;
 
+/**
+ * A tile is the square that can be clicked within Minesweeper. A tile may be a bomb, or contain
+ * a value, indicating the number of bombs nearby.
+ *
+ */
 public class Tile {
     private final int x;
     private final int y;
@@ -39,10 +44,22 @@ public class Tile {
         }
     }
 
+    /**
+     * Returns whether this tile is revealed or not. A revealed tile shows its contents, either
+     * the number of bombs next to it, or if it is a bomb itself.
+     *
+     * @return True if revealed, otherwise false.
+     */
     public boolean isRevealed() {
         return this.revealed;
     }
 
+    /**
+     * Returns whether this tile has a flag on it. A flagged tile cannot be clicked, other than
+     * to remove the flag.
+     *
+     * @return True if this tile is flagged, otherwise false.
+     */
     public boolean isFlagged() {
         return flagged;
     }
@@ -61,6 +78,10 @@ public class Tile {
         this.flagged = false;
     }
 
+    /**
+     * Increments the value that this tile holds (the value is the number of bombs next to this
+     * tile).
+     */
     public void incrementValue() {
         value++;
     }
@@ -123,6 +144,7 @@ public class Tile {
 
     }
 
+    // Renders the text with correct colour and font (and font size)
     private void renderText(GraphicsContext gc) {
         if (value > 0) {
             int x = getX() * 40 + 20;
@@ -142,6 +164,7 @@ public class Tile {
         }
     }
 
+    // Draws an image to the canvas at this tiles location
     private void drawImage(Image image, GraphicsContext gc) {
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(40);
@@ -167,6 +190,10 @@ public class Tile {
         return bomb;
     }
 
+    /**
+     * Handles the operations that should happen when this tile is clicked (although, this does not
+     * necessarily occur when the tile is clicked).
+     */
     public void click() {
         if (!flagged && !revealed) {
             reveal();
@@ -180,6 +207,9 @@ public class Tile {
         }
     }
 
+    /**
+     * Handles the operations that should happen when this tile is right-clicked.
+     */
     public void rightClick() {
         if (!this.isRevealed()) {
             if (this.flagged) {
@@ -191,6 +221,11 @@ public class Tile {
 
     }
 
+    /**
+     * String representation of this tile. This is used for debugging.
+     *
+     * @return string representation of this tile.
+     */
     @Override
     public String toString() {
         if (isBomb()) {

@@ -10,10 +10,16 @@ import javafx.stage.Stage;
 
 public class Game extends Application {
 
-    private final Canvas canvas = new Canvas(400, 400);
-    public static final Board board = new Board(10,10,10);
-    private static boolean gameOver = false;
-    private static boolean gameStart = true;
+    private static final int CANVAS_WIDTH = 400;
+    private static final int CANVAS_HEIGHT = 400;
+    private static final int INITIAL_BOARD_HEIGHT = 10;
+    private static final int INITIAL_BOARD_WIDTH = 10;
+    private static final int INITIAL_BOARD_BOMBS = 10;
+    private final Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    public static final Board board =
+            new Board(INITIAL_BOARD_HEIGHT, INITIAL_BOARD_WIDTH, INITIAL_BOARD_BOMBS);
+    private static boolean gameOver;
+    private static boolean gameStart;
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane pane = new BorderPane();
@@ -22,7 +28,10 @@ public class Game extends Application {
         stage.setScene(root);
 
         canvas.setOnMouseClicked(this::clickSquare);
-        System.out.println(board);
+        gameOver = false;
+        gameStart = true;
+
+
         render();
         stage.show();
     }
