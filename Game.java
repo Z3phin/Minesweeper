@@ -1,7 +1,8 @@
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -17,8 +18,28 @@ public class Game extends Application {
         Scene root = new Scene(pane,600,600);
         stage.setScene(root);
 
+        canvas.setOnMouseClicked(this::clickSquare);
         System.out.println(board);
-        board.render(canvas.getGraphicsContext2D());
+        render();
         stage.show();
+    }
+
+    private void clickSquare(MouseEvent mouseEvent) {
+        int x = (int) Math.floor(mouseEvent.getX() / 50);
+        int y = (int) Math.floor(mouseEvent.getY() / 50);
+        Tile tile = board.getTile(x,y);
+        tile.reveal();
+        render();
+
+    }
+
+    private void render() {
+        clearCanvas();
+        board.render(canvas.getGraphicsContext2D());
+    }
+
+    private void clearCanvas() {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
     }
 }
