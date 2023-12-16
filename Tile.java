@@ -7,18 +7,18 @@ public class Tile {
     private final int value;
     private boolean revealed;
     private boolean flagged;
+    private boolean bomb;
 
     /**
      * Creates an instance of tile.
      *
      * @param x x coordinate position.
      * @param y y coordinate position.
-     * @param value value held by this tile.
      */
-    public Tile(int x, int y, int value) {
+    public Tile(int x, int y) {
         this.x = x;
         this.y = y;
-        this.value = value;
+        this.value = 0;
         this.revealed = false;
         this.flagged = false;
     }
@@ -81,5 +81,21 @@ public class Tile {
     public void render(GraphicsContext gc) {
         gc.fillRect(getX(), getY(), 50,50);
         gc.fillText(String.valueOf(getValue()), getX(),getY());
+    }
+
+    /**
+     * Sets this tile to have a bomb.
+     */
+    public void setBomb() {
+        this.bomb = true;
+    }
+
+    /**
+     * Returns whether this tile contains a bomb or not.
+     *
+     * @return True if this tile has a bomb, otherwise false.
+     */
+    public boolean isBomb() {
+        return bomb;
     }
 }
