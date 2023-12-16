@@ -43,6 +43,10 @@ public class Tile {
         return this.revealed;
     }
 
+    public boolean isFlagged() {
+        return flagged;
+    }
+
     /**
      * Sets a flag on this tile
      */
@@ -166,6 +170,7 @@ public class Tile {
     public void click() {
         if (!flagged && !revealed) {
             reveal();
+            Game.board.incrementRevealed();
             if (isBomb()) {
                 this.clickedBomb = true;
                 Game.setGameOver();

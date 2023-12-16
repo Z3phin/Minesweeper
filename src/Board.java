@@ -7,14 +7,15 @@ public class Board {
     private final int height;
     private final int width;
     private final int bombs;
+    private int revealed;
 
     public Board(int height, int width, int bombs) {
-         tiles = new Tile[height][width];
+         this.tiles = new Tile[height][width];
          this.height = height;
          this.width = width;
          this.bombs = bombs;
+         this.revealed = 0;
          populate();
-         populateBombs();
     }
 
     public Tile getTile(int x, int y) {
@@ -38,6 +39,13 @@ public class Board {
         Tile tile = getTile(x,y);
         tile.rightClick();
     }
+
+    public void incrementRevealed() {
+        revealed++;
+        if (revealed == (width * height - bombs)) {
+            Game.setGameWin();
+        }
+    }
     private void populate() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -46,19 +54,21 @@ public class Board {
         }
     }
 
-    private void populateBombs() {
+    public void populateBombs(int avoidX, int avoidY) {
         Random random = new Random();
         int bombsToSet = this.bombs;
 
         while (bombsToSet > 0) {
-            int x = random.nextInt(width);
-            int y = random.nextInt(height);
-            Tile tile = this.getTile(x, y);
+            int randX = random.nextInt(width);
+            int randY = random.nextInt(height);
+            if (randX != avoidX && randY != avoidX) {
+                Tile tile = this.getTile(randX, randY);
 
-            if (!tile.isBomb()) {
-                tile.setBomb();
-                bombsToSet--;
-                increaseValueOfNeighbours(x, y);
+                if (!tile.isBomb()) {
+                    tile.setBomb();
+                    bombsToSet--;
+                    increaseValueOfNeighbours(randX, randY);
+                }
             }
 
         }
@@ -105,6 +115,17 @@ public class Board {
             for (int x = 0; x < width; x++) {
                 tiles[y][x].removeFlag();
                 tiles[y][x].reveal();
+            }
+        }
+    }
+
+    public void flagAllBombs() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Tile tile = tiles[y][x];
+                if (tile.isBomb() && !tile.isFlagged()) {
+                    tile.setFlag();
+                }
             }
         }
     }

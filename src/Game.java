@@ -13,6 +13,7 @@ public class Game extends Application {
     private final Canvas canvas = new Canvas(400, 400);
     public static final Board board = new Board(10,10,10);
     private static boolean gameOver = false;
+    private static boolean gameStart = true;
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane pane = new BorderPane();
@@ -27,14 +28,20 @@ public class Game extends Application {
     }
 
     private void clickSquare(MouseEvent mouseEvent) {
-        int x = (int) Math.floor(mouseEvent.getX() / 40);
-        int y = (int) Math.floor(mouseEvent.getY() / 40);
-        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            board.click(x, y);
-        } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-            board.rightClick(x, y);
+        if (!gameOver) {
+            int x = (int) Math.floor(mouseEvent.getX() / 40);
+            int y = (int) Math.floor(mouseEvent.getY() / 40);
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                if (gameStart) {
+                    board.populateBombs(x, y);
+                    gameStart = false;
+                }
+                board.click(x, y);
+            } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                board.rightClick(x, y);
+            }
+            render();
         }
-        render();
     }
 
     private void render() {
@@ -50,5 +57,10 @@ public class Game extends Application {
     public static void setGameOver() {
         gameOver = true;
         board.reveal();
+    }
+
+    public static void setGameWin() {
+        gameOver = true;
+        board.flagAllBombs();
     }
 }
